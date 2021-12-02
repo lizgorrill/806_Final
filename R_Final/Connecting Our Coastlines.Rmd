@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 MA <- map_data("state", "Massachusetts")
 
-COC <- read.csv("R_Final/MA_Cleanup_Data.csv", stringsAsFactors = TRUE)
+COC <- read.csv("MA_Cleanup_Data.csv", stringsAsFactors = TRUE)
 
 ggplot()+geom_polygon(data = MA, aes(x=long, y=lat, group = group), fill = "grey", alpha = 0.6) +
     geom_point(data = COC, aes(x=long, y = lat, size = Weight_lbs, color = Weight_lbs)) + coord_map() 
@@ -46,7 +46,7 @@ coc_map <- COC2 %>%
   scale_size_continuous(range = c(1,10)) +
   theme_void() +
   coord_map() + 
-  labs(title = "Connecting our Coastlines", subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data", color = "Weight (pounds)")
+  labs(title = "Connecting our Coastlines", subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data 2021", color = "Weight (pounds)")
  
 
 
@@ -56,12 +56,4 @@ coc_map
 
 
 ```
-```{r}
 
-
-
-
-
-
-
-```
