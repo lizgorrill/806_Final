@@ -46,7 +46,7 @@ coc_map <- COC2 %>%
   scale_size_continuous(range = c(1,10)) +
   theme_void() +
   coord_map() + 
-  labs(title = "Connecting our Coastlines", subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data 2021", color = "Weight (pounds)")
+  labs(title = "Connecting our Coastlines", subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data ", color = "Weight (pounds)")
  
 
 
