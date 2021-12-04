@@ -57,3 +57,11 @@ coc_map
 
 ```
 
+```{r}
+
+COC_long <- COC%>%
+  pivot_longer(cols = c(starts_with("Cig"), starts_with("Plastic"), starts_with("Foam"), starts_with("Food"), starts_with("Ball"), starts_with("X6"), starts_with("Juice"), starts_with("Vape"), starts_with("Single"), starts_with("Bait"), starts_with("Buoy"), starts_with("Large"), starts_with("Fish"), starts_with("Hooks"), starts_with("Light"), starts_with("Net"), starts_with("Pots"), starts_with("Rope"), starts_with("Diaper"), starts_with("Syr"), starts_with("Tamp"), starts_with("Tooth"), starts_with("Bott"), starts_with("Shotg"), starts_with("Zip"), starts_with("Dog"), starts_with("Paper"), starts_with("Treated"), starts_with("Wood"), starts_with("Metal"), starts_with("Alum"), starts_with("Can"), starts_with("Glass"), starts_with("Cond"), starts_with("Tire"), starts_with("Fire"), starts_with("Tarp"), starts_with("Disin"), starts_with("Latex"), starts_with("Reus")),
+               names_to = "Trash_Type", values_to = "Trash_Amount")
+
+
+```
