@@ -61,7 +61,61 @@ coc_map
 
 COC_long <- COC%>%
   pivot_longer(cols = c(starts_with("Cig"), starts_with("Plastic"), starts_with("Foam"), starts_with("Food"), starts_with("Ball"), starts_with("X6"), starts_with("Juice"), starts_with("Vape"), starts_with("Single"), starts_with("Bait"), starts_with("Buoy"), starts_with("Large"), starts_with("Fish"), starts_with("Hooks"), starts_with("Light"), starts_with("Net"), starts_with("Pots"), starts_with("Rope"), starts_with("Diaper"), starts_with("Syr"), starts_with("Tamp"), starts_with("Tooth"), starts_with("Bott"), starts_with("Shotg"), starts_with("Zip"), starts_with("Dog"), starts_with("Paper"), starts_with("Treated"), starts_with("Wood"), starts_with("Metal"), starts_with("Alum"), starts_with("Can"), starts_with("Glass"), starts_with("Cond"), starts_with("Tire"), starts_with("Fire"), starts_with("Tarp"), starts_with("Disin"), starts_with("Latex"), starts_with("Reus")),
-               names_to = "Trash_Type", values_to = "Trash_Amount")
+               names_to = "Trash_Type", values_to = "Trash_Amount") 
+
+ggplot(COC_long, aes(x = Trash_Type, y = Trash_Amount)) + 
+    geom_segment( aes(x=Trash_Type, xend=Trash_Type, y=0, yend=Trash_Amount), color="skyblue") +
+  geom_point( color="blue", size=4, alpha=0.6) +
+  theme_light() +
+  coord_flip() +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank()
+  )
 
 ###sort data by type, create bar chart of total trash
+```
+
+
+
+```{r}
+
+COC_Sums <- COC_long %>%
+  select(Beach, Trash_Type, Trash_Amount) %>%
+  group_by(Trash_Type)
+   
+  
+COC_Sum <-   aggregate(COC_long$Trash_Amount, by=list(Trash_Type=COC_long$Trash_Type), FUN=sum, na.rm = TRUE)
+
+coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash Type Distribution") 
+
+coc_bc
+
+
+```
+
+```{r}
+
+mytext <- COC_Sum%>% arrange(x) %>%
+  mutate(name=factor(Trash_Type, unique(Trash_Type))) %>%
+  mutate(mytext = paste(
+    "Trash Type: ", name, "\n",
+    "Amount of Trash: ", x, sep = ""))  
+
+
+coc_cbc <- ggplot(COC_Sum, aes(x = Trash_Type, y = x)) +
+  geom_bar(stat = "identity", fill = alpha(0.3), aes(color = Trash_Type, text = mytext))+
+  ylim(-100, 150) +
+   theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1,4), "cm")) +
+  coord_polar(start = 0) +
+  geom_text(data=COC_Sum, aes(x=Trash_Type, y=x+10, label=Trash_Type), color="black", fontface="bold",alpha=0.6, size=2.5,  inherit.aes = FALSE ) 
+
+coc_cbc <- ggplotly(coc_cbc, tooltip = "text")
+
 ```
