@@ -9,14 +9,20 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+
 # Abstract
 
 The Surfrider Foundation, Massachusetts Chapter is a non-profit organization that "is dedicated to the protection and enjoyment of the world's ocean, waves and beaches, for all people, through a powerful activist network" (Surfrider Foundation, 2021). Each year beach cleanups serve as the primary form of volunteer work and the events provide a space to collect data through citizen science as well as discuss the impacts of the trash which is collected. The coronavirus (COVID-19) pandemic posed an obstacle to beach cleanups in 2021 with gatherings being against local regulations until June 2021 and volunteer comfort with gatherings being hindered through the entirety of 2021. In order to continue making progress on beach cleanups and citizen science data collection of beach trash, the Connecting Our Coastline (COC) do-it-yourself (DIY) beach cleanup initiative was introduced with the goal of at least one beach cleanup in each coastal community of Massachusetts. This paper serves as an assessment of the year long effort of COC and the implications of the results that were found through the data collected at each DIY beach cleanup.
 
 # Introduction
 
+In an effort to maintain volunteer involvement and continue the commitment to keeping Massachusetts beaches clean, the Surfrider Foundation, Massachusetts Chapter executive committee created DIY beach cleanup materials in November 2020 to encourage chapter volunteers and residents of coastal communities to get outside and 
 
-# 
+# Methods
+
+In November 2020, the executive commitee of the Surfrider Foundation, Massachusetts Chapter, put together materials including data collection cards, beach cleanup tips and disclaimers in the DIY page of the chapters website in order to provide people with a social disctancing option for keeping Massachusetts beaches clean. To gain involvement in the DIY cleanups, an initiative was held in December 2020 where people who signed up, completed a DIY beach cleanup and returned their data cards were rewarded with a gift from the chapter. This successful initiative, was then followed by a period of limited chapter related beach cleanups from January 2021 through March 2021 due to increased restrictions surrounding the COVID-19 pandemic in Massachusetts as well as restrictions put in place by Surfrider Foundation, National.
+
+The Connecting our Coastlines initiative began in April 2021, with the initiative being announced during the monthly chapter meeting on April 7, 2021. Along with the announcement
 
 
 ```{r}
