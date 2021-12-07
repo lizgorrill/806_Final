@@ -9,8 +9,14 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+# Abstract
+
+The Surfrider Foundation, Massachusetts Chapter is a non-profit organization that "is dedicated to the protection and enjoyment of the world's ocean, waves and beaches, for all people, through a powerful activist network" (Surfrider Foundation, 2021). Each year beach cleanups serve as the primary form of volunteer work and the events provide a space to collect data through citizen science as well as discuss the impacts of the trash which is collected. The coronavirus (COVID-19) pandemic posed an obstacle to beach cleanups in 2021 with gatherings being against local regulations until June 2021 and volunteer comfort with gatherings being hindered through the entirety of 2021. In order to continue making progress on beach cleanups and citizen science data collection of beach trash, the Connecting Our Coastline (COC) do-it-yourself (DIY) beach cleanup initiative was introduced with the goal of at least one beach cleanup in each coastal community of Massachusetts. This paper serves as an assessment of the year long effort of COC and the implications of the results that were found through the data collected at each DIY beach cleanup.
+
+# Introduction
 
 
+# 
 
 
 ```{r}
@@ -91,7 +97,7 @@ coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash 
          yaxis = list(title = 'Trash Amount (# of Individual Pieces)'))
 coc_bc
 
-api_create(coc_bc, filename = "COC_Locations")
+api_create(coc_bc, filename = "COC_Trash_Totals")
 
 ```
 
