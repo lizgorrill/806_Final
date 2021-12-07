@@ -21,7 +21,7 @@ MA <- map_data("state", "Massachusetts")
 COC <- read.csv("MA_Cleanup_Data.csv", stringsAsFactors = TRUE)
 
 ggplot()+geom_polygon(data = MA, aes(x=long, y=lat, group = group), fill = "grey", alpha = 0.6) +
-    geom_point(data = COC, aes(x=long, y = lat, size = Weight_lbs, color = Weight_lbs)) + coord_map() 
+    geom_point(data = COC, aes(x=long, y = lat, size = Weight_lbs, color = Weight_lbs)) + coord_map() + xlab("Longitude") + ylab("Latitude") 
   
 
 
@@ -54,13 +54,15 @@ coc_map <- ggplotly(coc_map, tooltip = "text")
 
 coc_map
 
+api_create(coc_map, filename = "COC_Locations")
+
 
 ```
 
 ```{r}
 
 COC_long <- COC%>%
-  pivot_longer(cols = c(starts_with("Cig"), starts_with("Plastic"), starts_with("Foam"), starts_with("Food"), starts_with("Ball"), starts_with("X6"), starts_with("Juice"), starts_with("Vape"), starts_with("Single"), starts_with("Bait"), starts_with("Buoy"), starts_with("Large"), starts_with("Fish"), starts_with("Hooks"), starts_with("Light"), starts_with("Net"), starts_with("Pots"), starts_with("Rope"), starts_with("Diaper"), starts_with("Syr"), starts_with("Tamp"), starts_with("Tooth"), starts_with("Bott"), starts_with("Shotg"), starts_with("Zip"), starts_with("Dog"), starts_with("Paper"), starts_with("Treated"), starts_with("Wood"), starts_with("Metal"), starts_with("Alum"), starts_with("Can"), starts_with("Glass"), starts_with("Cond"), starts_with("Tire"), starts_with("Fire"), starts_with("Tarp"), starts_with("Disin"), starts_with("Latex"), starts_with("Reus")),
+  pivot_longer(cols = c(starts_with("Cig"), starts_with("Plastic"), starts_with("Foam"), starts_with("Ball"), starts_with("Fish"), starts_with("Hyg"), starts_with("Paper"), starts_with("Treated"), starts_with("Wood"), starts_with("Metal"), starts_with("Glass"),  starts_with("Tire"), starts_with("Fire"), starts_with("Tarp"),  starts_with("Shot")),
                names_to = "Trash_Type", values_to = "Trash_Amount") 
 
 ggplot(COC_long, aes(x = Trash_Type, y = Trash_Amount)) + 
@@ -80,16 +82,11 @@ ggplot(COC_long, aes(x = Trash_Type, y = Trash_Amount)) +
 
 
 ```{r}
-
-COC_Sums <- COC_long %>%
-  select(Beach, Trash_Type, Trash_Amount) %>%
-  mutate(Plastic = Plastic_Bottles _Beverage + Plastic_Bags_Shopping + Plastic_Straws +Plastic_Utensil +Plastic_Cups +Plastic_lids +Food_Wrappers )
    
   
 COC_Sum <-   aggregate(COC_long$Trash_Amount, by=list(Trash_Type=COC_long$Trash_Type), FUN=sum, na.rm = TRUE)
 
 coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash Type Distribution") 
-
 coc_bc
 
 
@@ -105,8 +102,8 @@ mytext <- COC_Sum%>% arrange(x) %>%
 
 
 coc_cbc <- ggplot(COC_Sum, aes(x = Trash_Type, y = x)) +
-  geom_bar(stat = "identity", fill = alpha(0.3), aes(color = Trash_Type, text = mytext))+
-  ylim(-100, 150) +
+  geom_bar(stat = "identity", fill = alpha(0.3), aes(color = Trash_Type))+
+  ylim(-50, 5,000) +
    theme_minimal() +
   theme(
     axis.text = element_blank(),
@@ -116,17 +113,25 @@ coc_cbc <- ggplot(COC_Sum, aes(x = Trash_Type, y = x)) +
   coord_polar(start = 0) +
   geom_text(data=COC_Sum, aes(x=Trash_Type, y=x+10, label=Trash_Type), color="black", fontface="bold",alpha=0.6, size=2.5,  inherit.aes = FALSE ) 
 
-coc_cbc <- ggplotly(coc_cbc, tooltip = "text")
+
+coc_cbc
 
 ```
 
 
 ```{r}
 
-COC_Beach <- COC %>%
-  mutate(Plastic = sum(starts_with("Plastic")))
-
-
+ggplot(COC_Sum, aes(x = Trash_Type, y = x)) + 
+    geom_segment( aes(x=Trash_Type, xend=Trash_Type, y=0, yend=x), color="skyblue") +
+  geom_point( color="blue", size=4, alpha=0.6) +
+  theme_light() +
+  coord_flip() +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.border = element_blank(),
+    axis.ticks.y = element_blank()
+  ) +
+  xlab("Trash Type") + ylab("Amount (Individual Pieces)")
 
 
 ```
