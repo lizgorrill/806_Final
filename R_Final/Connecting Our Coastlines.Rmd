@@ -3,10 +3,11 @@ title: "Final Paper"
 author: "Liz Gorrill"
 date: "11/28/2021"
 output: pdf_document
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ```
 
 
@@ -16,18 +17,32 @@ The Surfrider Foundation, Massachusetts Chapter is a non-profit organization tha
 
 # Introduction
 
+Discuss the Surfrider Foundation, its mission and the MA chapter in specific, ie. types of events and community involvement
+
+Discuss the types of trash most commonly found on Massachusetts beaches and why cataloging the types of trash that are found is important - accountability, marine entanglements and starvation, 
+
 In an effort to maintain volunteer involvement and continue the commitment to keeping Massachusetts beaches clean, the Surfrider Foundation, Massachusetts Chapter executive committee created DIY beach cleanup materials in November 2020 to encourage chapter volunteers and residents of coastal communities to get outside and 
 
 # Methods
 
-In November 2020, the executive commitee of the Surfrider Foundation, Massachusetts Chapter, put together materials including data collection cards, beach cleanup tips and disclaimers in the DIY page of the chapters website in order to provide people with a social disctancing option for keeping Massachusetts beaches clean. To gain involvement in the DIY cleanups, an initiative was held in December 2020 where people who signed up, completed a DIY beach cleanup and returned their data cards were rewarded with a gift from the chapter. This successful initiative, was then followed by a period of limited chapter related beach cleanups from January 2021 through March 2021 due to increased restrictions surrounding the COVID-19 pandemic in Massachusetts as well as restrictions put in place by Surfrider Foundation, National.
+In November 2020, the executive commitee of the Surfrider Foundation, Massachusetts Chapter, put together materials including data collection cards, beach cleanup tips and disclaimers in the DIY page of the chapters website in order to provide people with a social distancing option for keeping Massachusetts beaches clean. To gain involvement in the DIY cleanups, an initiative was held in December 2020 where people who signed up, completed a DIY beach cleanup and returned their data cards were rewarded with a gift from the chapter. This successful initiative, was then followed by a period of limited chapter related beach cleanups from January 2021 through March 2021 due to increased restrictions surrounding the COVID-19 pandemic in Massachusetts as well as restrictions put in place by Surfrider Foundation, National.
 
-The Connecting our Coastlines initiative began in April 2021, with the initiative being announced during the monthly chapter meeting on April 7, 2021. Along with the announcement
+The Connecting our Coastlines (COC) initiative began in April 2021, with the initiative being announced during the monthly chapter meeting on April 7, 2021. Along with the announcement the materials previously published in November 2020 were shared to chapter volunteers through the chapter e-mail and were made readily available to the public through social media postings on Facebook and Instagram. On June 8, 2021 as part of World Oceans Day, the chapter held the first in person beach cleanup event (since the inception of the COVID-19 pandemic in Massachusetts in March 2020) where volunteers were asked to sign up for time slots to allow for social distancing and time for disinfection of buckets and clipboards between groups. This cleanup served as a way to gain more interest in COC and was the beginning of six months of consistent DIY beach cleanups along with ten (10) chapter beach cleanups. 
+
+Those participating in DIY cleanups and chapter cleanups were asked to collect data regarding the trash that they collected, cataloging the type of trash and the amount of each type collected (individual pieces). Once the DIY or chapter beach cleanups were completed, the collected data was submitted either by the individual through a google form which allowed them to input all of the data, or submitted via mail or e-mail to the chapter executive committee for data entry. The data entry process included the entry of trash types, trash amounts, total weight of cleanup, cleanup location (beach, latitude, longitude and town) and providing follow-up volunteer emails if requested on the submitted data sheet. From the online database, sensitive volunteer information was removed from the downloaded working spreadsheet for the volunteers security. 
+
+#Discussion
+
+Discuss cleanup locations
+Discuss Trash totals
+Discuss the consequences of types of trash that were found - particularly those which were commonly found
+Discuss the current work Surfrider is doing to address the types of trash seen in Massachusetts
 
 
 ```{r}
 
-
+library(maps)
+library(ggmap)
 MA <- map_data("state", "Massachusetts")
 
 COC <- read.csv("MA_Cleanup_Data.csv", stringsAsFactors = TRUE)
@@ -43,6 +58,8 @@ ggplot()+geom_polygon(data = MA, aes(x=long, y=lat, group = group), fill = "grey
 ```
 
 ```{r}
+library(dplyr)
+library(plotly)
 
 COC2 <- COC %>%
   arrange(Weight_lbs) %>%
@@ -72,6 +89,7 @@ api_create(coc_map, filename = "COC_Locations")
 ```
 
 ```{r}
+library(tidyr)
 
 COC_long <- COC%>%
   pivot_longer(cols = c(starts_with("Cig"), starts_with("Plastic"), starts_with("Foam"), starts_with("Ball"), starts_with("Fish"), starts_with("Hyg"), starts_with("Paper"), starts_with("Treated"), starts_with("Wood"), starts_with("Metal"), starts_with("Glass"),  starts_with("Tire"), starts_with("Fire"), starts_with("Tarp"),  starts_with("Shot")),
@@ -107,32 +125,6 @@ api_create(coc_bc, filename = "COC_Trash_Totals")
 
 ```
 
-```{r}
-
-mytext <- COC_Sum%>% arrange(x) %>%
-  mutate(name=factor(Trash_Type, unique(Trash_Type))) %>%
-  mutate(mytext = paste(
-    "Trash Type: ", name, "\n",
-    "Amount of Trash: ", x, sep = ""))  
-
-
-coc_cbc <- ggplot(COC_Sum, aes(x = Trash_Type, y = x)) +
-  geom_bar(stat = "identity", fill = alpha(0.3), aes(color = Trash_Type))+
-  ylim(-50, 5,000) +
-   theme_minimal() +
-  theme(
-    axis.text = element_blank(),
-    axis.title = element_blank(),
-    panel.grid = element_blank(),
-    plot.margin = unit(rep(-1,4), "cm")) +
-  coord_polar(start = 0) +
-  geom_text(data=COC_Sum, aes(x=Trash_Type, y=x+10, label=Trash_Type), color="black", fontface="bold",alpha=0.6, size=2.5,  inherit.aes = FALSE ) 
-
-
-coc_cbc
-
-```
-
 
 ```{r}
 
@@ -147,6 +139,16 @@ ggplot(COC_Sum, aes(x = Trash_Type, y = x)) +
     axis.ticks.y = element_blank()
   ) +
   xlab("Trash Type") + ylab("Amount (Individual Pieces)")
+
+
+```
+
+```{r}
+
+ggplot(COC_long, aes(fill = Trash_Type, y = Trash_Amount, x = Beach)) +
+  geom_bar(position = "stack", stat = "identity") + 
+  theme(axis.text.x = element_text(size = 5, angle = 45, hjust = 1), legend.key.size = unit(.25, "cm")) +
+  ylab("Trash Amount (Individual Pieces)") 
 
 
 ```
