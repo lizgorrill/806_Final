@@ -91,6 +91,7 @@ coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash 
          yaxis = list(title = 'Trash Amount (# of Individual Pieces)'))
 coc_bc
 
+api_create(coc_bc, filename = "COC_Locations")
 
 ```
 
