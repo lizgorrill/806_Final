@@ -86,7 +86,9 @@ ggplot(COC_long, aes(x = Trash_Type, y = Trash_Amount)) +
   
 COC_Sum <-   aggregate(COC_long$Trash_Amount, by=list(Trash_Type=COC_long$Trash_Type), FUN=sum, na.rm = TRUE)
 
-coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash Type Distribution") 
+coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash Type Distribution") %>%
+    layout(title = 'Beach Trash Totals 2021', xaxis = list(title = 'Trash Type'), 
+         yaxis = list(title = 'Trash Amount (# of Individual Pieces)'))
 coc_bc
 
 
