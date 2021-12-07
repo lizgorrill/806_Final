@@ -83,7 +83,7 @@ ggplot(COC_long, aes(x = Trash_Type, y = Trash_Amount)) +
 
 COC_Sums <- COC_long %>%
   select(Beach, Trash_Type, Trash_Amount) %>%
-  group_by(Trash_Type)
+  mutate(Plastic = Plastic_Bottles _Beverage + Plastic_Bags_Shopping + Plastic_Straws +Plastic_Utensil +Plastic_Cups +Plastic_lids +Food_Wrappers )
    
   
 COC_Sum <-   aggregate(COC_long$Trash_Amount, by=list(Trash_Type=COC_long$Trash_Type), FUN=sum, na.rm = TRUE)
@@ -117,5 +117,16 @@ coc_cbc <- ggplot(COC_Sum, aes(x = Trash_Type, y = x)) +
   geom_text(data=COC_Sum, aes(x=Trash_Type, y=x+10, label=Trash_Type), color="black", fontface="bold",alpha=0.6, size=2.5,  inherit.aes = FALSE ) 
 
 coc_cbc <- ggplotly(coc_cbc, tooltip = "text")
+
+```
+
+
+```{r}
+
+COC_Beach <- COC %>%
+  mutate(Plastic = sum(starts_with("Plastic")))
+
+
+
 
 ```
