@@ -29,7 +29,11 @@ In November 2020, the executive commitee of the Surfrider Foundation, Massachuse
 
 The Connecting our Coastlines (COC) initiative began in April 2021, with the initiative being announced during the monthly chapter meeting on April 7, 2021. Along with the announcement the materials previously published in November 2020 were shared to chapter volunteers through the chapter e-mail and were made readily available to the public through social media postings on Facebook and Instagram. On June 8, 2021 as part of World Oceans Day, the chapter held the first in person beach cleanup event (since the inception of the COVID-19 pandemic in Massachusetts in March 2020) where volunteers were asked to sign up for time slots to allow for social distancing and time for disinfection of buckets and clipboards between groups. This cleanup served as a way to gain more interest in COC and was the beginning of six months of consistent DIY beach cleanups along with ten (10) chapter beach cleanups. 
 
-Those participating in DIY cleanups and chapter cleanups were asked to collect data regarding the trash that they collected, cataloging the type of trash and the amount of each type collected (individual pieces). Once the DIY or chapter beach cleanups were completed, the collected data was submitted either by the individual through a google form which allowed them to input all of the data, or submitted via mail or e-mail to the chapter executive committee for data entry. The data entry process included the entry of trash types, trash amounts, total weight of cleanup, cleanup location (beach, latitude, longitude and town) and providing follow-up volunteer emails if requested on the submitted data sheet. From the online database, sensitive volunteer information was removed from the downloaded working spreadsheet for the volunteers security. 
+Those participating in DIY cleanups and chapter cleanups were asked to collect data regarding the trash that they collected, cataloging the type of trash and the amount of each type collected (individual pieces). Once the DIY or chapter beach cleanups were completed, the collected data was submitted either by the individual through a Google form which allowed them to input all of the data, or submitted via mail or e-mail to the chapter executive committee for data entry. The data entry process included the entry of trash types, trash amounts, total weight of cleanup, cleanup location (beach, latitude, longitude and town) and providing follow-up volunteer emails if requested on the submitted data sheet. From the online database, sensitive volunteer information was removed from the downloaded working spreadsheet for the volunteers security. 
+
+# Results
+
+As of November 27, 2021, a total of 40 beach cleanups were conducted that collected data for the Surfrider Foundation, Massachusetts Chapter, including 10 chapter cleanups and 30 DIY cleanups as part of the COC initiative.
 
 #Discussion
 
@@ -43,13 +47,21 @@ Discuss the current work Surfrider is doing to address the types of trash seen i
 
 library(maps)
 library(ggmap)
+library(ggplot2)
+
 MA <- map_data("state", "Massachusetts")
 
 COC <- read.csv("MA_Cleanup_Data.csv", stringsAsFactors = TRUE)
 
 ggplot()+geom_polygon(data = MA, aes(x=long, y=lat, group = group), fill = "grey", alpha = 0.6) +
-    geom_point(data = COC, aes(x=long, y = lat, size = Weight_lbs, color = Weight_lbs)) + coord_map() + xlab("Longitude") + ylab("Latitude") 
-  
+    geom_point(data = COC, aes(x=long, y = lat, size = Weight_lbs, color = Weight_lbs)) + coord_map() + xlab("Longitude") + ylab("Latitude") + 
+  labs(title = "Connecting our Coastlines",
+         subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data 2021",
+         caption = "Fig 1. Amount of trash collected (in pounds) per beach cleanup
+       location reported during the 2021 Connecting Our Coastlines initiative.",
+      fill = "Weight (pounds)") + 
+  theme(plot.caption = element_text(hjust = 0.5,),
+        plot.subtitle = element_text(size = 7))
 
 
  
@@ -75,7 +87,8 @@ coc_map <- COC2 %>%
   scale_size_continuous(range = c(1,10)) +
   theme_void() +
   coord_map() + 
-  labs(title = "Connecting our Coastlines", subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data ", color = "Weight (pounds)")
+  labs(title = "Connecting our Coastlines", subtitle = "Surfrider Foundation Massachusetts Chapter beach cleanup data ", color = "Weight (pounds)") +
+  layout(annotations = )
  
 
 
@@ -104,7 +117,7 @@ ggplot(COC_long, aes(x = Trash_Type, y = Trash_Amount)) +
     panel.grid.major.y = element_blank(),
     panel.border = element_blank(),
     axis.ticks.y = element_blank()
-  )
+  ) + xlab("Trash Type") + ylab("Trash Amount")
 
 ###sort data by type, create bar chart of total trash
 ```
@@ -118,7 +131,7 @@ COC_Sum <-   aggregate(COC_long$Trash_Amount, by=list(Trash_Type=COC_long$Trash_
 
 coc_bc <- plot_ly(COC_Sum, x = ~Trash_Type, y = ~x, type = "bar", name = "Trash Type Distribution") %>%
     layout(title = 'Beach Trash Totals 2021', xaxis = list(title = 'Trash Type'), 
-         yaxis = list(title = 'Trash Amount (# of Individual Pieces)'))
+         yaxis = list(title = 'Trash Amount (# of Individual Pieces)')) 
 coc_bc
 
 api_create(coc_bc, filename = "COC_Trash_Totals")
